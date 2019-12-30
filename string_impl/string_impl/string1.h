@@ -36,9 +36,14 @@ public:
 	char & operator[](size_t i) { return str[i]; }
 	const	char & operator[](size_t i) const { return str[i]; }
 
+	//modifying
+	String &operator+=(const String &s1);
+	String &operator+=(const char *sz) { return (*this) += String(sz); } //C string
+
 	//operations on String
 	const char *c_str()const { return str; }
-	inline size_t find_first_of(const char c)const;
+	const char *data()const { return str; }
+	size_t find_first_of(char c, size_t pos = 0U) const;
 
 
 	//member constants
@@ -48,10 +53,6 @@ public:
 	//operators overload
 	String operator+(const String &s1) const;
 	String operator+(const char *sz) const { return (*this) + String(sz); } //C string
-
-	//modifying
-	String &operator+=(const String &s1);
-	String &operator+=(const char *sz) { return (*this) += String(sz); } //C string
 
 	//friend operators overload
 	friend String operator+	(const char *sz,	const String &s) { return String(sz) + s; } //C string

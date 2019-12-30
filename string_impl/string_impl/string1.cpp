@@ -41,9 +41,21 @@ void String::resize(size_t n)
 	}
 }
 
-inline size_t String::find_first_of(const char c) const
+String & String::operator+=(const String & s1)
 {
-	for (size_t i = 0U; i < len; ++i)
+	len += s1.len;
+	char *temp = new char[len + 1U];
+	strcpy(temp, str);
+	delete[]str;
+	str = temp;
+	std::strcat(str, s1.str);
+
+	return *this;
+}
+
+size_t String::find_first_of(char c, size_t pos) const
+{
+	for (size_t i = pos; i < len; ++i)
 		if (c == str[i])
 			return i;
 	return npos;
@@ -58,18 +70,6 @@ String String::operator+(const String & s1) const
 	std::strcat(s2.str, s1.str);
 
 	return s2;
-}
-
-String & String::operator+=(const String & s1)
-{
-	len += s1.len;
-	char *temp = new char[len + 1U];
-	strcpy(temp, str);
-	delete[]str;
-	str = temp;
-	std::strcat(str, s1.str);
-
-	return *this;
 }
 
 istream & operator>>(istream & is, String & st) //it could be better, but...
