@@ -1,6 +1,6 @@
 #ifndef STRING1_H
 #define STRING1_H
-#include <cstring>
+#include <cstring> //size_t
 #include <iostream>
 using std::strcpy;
 using std::istream;
@@ -10,7 +10,7 @@ class String //TODO: allocate more memory for chars to add to the string
 	//size_t m_capcity; //size of allocated storage
 	size_t len; //length of string
 	char *str;
-	enum { ISLIM = 80 }; //limit of characters from input
+	static constexpr size_t ISLIM = 80U; //limit of characters from input
 public:
 
 	//constructors
@@ -25,7 +25,7 @@ public:
 
 	//member functions
 	String & operator=(const String &st);
-	String & operator=(const char *s); //C string
+	String & operator=(const char *s); //C-string
 
 	//capacity
 	size_t length() const { return len; }
@@ -34,16 +34,17 @@ public:
 
 	//access to the element
 	char & operator[](size_t i) { return str[i]; }
-	const	char & operator[](size_t i) const { return str[i]; }
+	const char & operator[](size_t i) const { return str[i]; }
 
 	//modifying
 	String &operator+=(const String &s1);
-	String &operator+=(const char *sz) { return (*this) += String(sz); } //C string
+	String &operator+=(const char *sz) { return (*this) += String(sz); } //C-string
 
 	//operations on String
 	const char *c_str()const { return str; }
 	const char *data()const { return str; }
-	size_t find_first_of(char c, size_t pos = 0U) const;
+	size_t find(char c, size_t pos = 0U) const;
+	size_t find_first_of(char c, size_t pos = 0U) const { find(c, pos); }
 
 
 	//member constants
@@ -52,21 +53,21 @@ public:
 
 	//operators overload
 	String operator+(const String &s1) const;
-	String operator+(const char *sz) const { return (*this) + String(sz); } //C string
+	String operator+(const char *sz) const { return (*this) + String(sz); } //C-string
 
 	//friend operators overload
-	friend String operator+	(const char *sz,	const String &s) { return String(sz) + s; } //C string
+	friend String operator+	(const char *sz,	const String &s) { return String(sz) + s; } //C-string
 
 	//relational operators
-	friend bool operator==	(const String &st1, const String &st2) { return !std::strcmp(st1.str, st2.str); }
-	friend bool operator!=	(const String &st1, const String &st2) { return static_cast<bool>(std::strcmp(st1.str, st2.str)); }
+	friend bool operator==	(const String &st1, const String &st2) { return st1.len == st2.len && !std::strcmp(st1.str, st2.str); }
+	friend bool operator!=	(const String &st1, const String &st2) { return st1.len != st2.len && static_cast<bool>(std::strcmp(st1.str, st2.str)); }
 	friend bool operator<	(const String &st1, const String &st2) { return std::strcmp(st1.str, st2.str) < 0; }
 	friend bool operator<=	(const String &st1, const String &st2) { return std::strcmp(st1.str, st2.str) <= 0; }
 	friend bool operator>	(const String &st1, const String &st2) { return st2 < st1; }
 	friend bool operator>=	(const String &st1, const String &st2) { return st2 <= st1; }
 
 	//streams
-	friend istream & operator>>(istream & is, String & st); //it says "eat shit and die" to whitespace after word
+	friend istream & operator>>(istream & is, String & st);
 	friend std::ostream & operator<<(std::ostream & os, const String & st) { return os << st.str; }
 	friend istream & getline(istream & is, String & st);
 };

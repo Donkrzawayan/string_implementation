@@ -31,7 +31,7 @@ void String::resize(size_t n)
 			for (size_t i = len - 1; i < n; ++i)
 				str[i] = '\0';
 		}
-		else {
+		else { // n < len
 			std::strncpy(temp, str, n - 1);
 			str[n - 1] = '\0';
 		}
@@ -53,11 +53,11 @@ String & String::operator+=(const String & s1)
 	return *this;
 }
 
-size_t String::find_first_of(char c, size_t pos) const
+size_t String::find(char c, size_t pos) const
 {
-	for (size_t i = pos; i < len; ++i)
-		if (c == str[i])
-			return i;
+	for (; pos < len; ++pos)
+		if (c == str[pos])
+			return pos;
 	return npos;
 }
 
@@ -89,8 +89,11 @@ istream & operator>>(istream & is, String & st) //it could be better, but...
 		is.get(temp[i]);
 		while (i < (String::ISLIM - 2) && !std::isspace(temp[i]))
 			is.get(temp[++i]);
-		if(i< (String::ISLIM - 2))
+
+		if (i < (String::ISLIM - 2)) {
+			is.putback(temp[i]); //put whitespace after word back
 			temp[i] = '\0';
+		}
 		st += temp;
 	} while (i == (String::ISLIM - 2));
 
@@ -104,7 +107,6 @@ istream &getline(istream & is, String & st)
 	is.getline(temp, String::ISLIM);
 	st = temp;
 	while (is.fail() && !is.bad()) {
-		//what with rest of flags?
 		if (is.eof())
 			return is;
 		is.clear();
