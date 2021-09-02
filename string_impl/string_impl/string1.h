@@ -60,7 +60,7 @@ public:
 
 	//relational operators
 	friend bool operator==	(const String &st1, const String &st2) { return st1.len == st2.len && !std::strcmp(st1.str, st2.str); }
-	friend bool operator!=	(const String &st1, const String &st2) { return st1.len != st2.len && static_cast<bool>(std::strcmp(st1.str, st2.str)); }
+	friend bool operator!=	(const String &st1, const String &st2) { return !(st1 == st2); }
 	friend bool operator<	(const String &st1, const String &st2) { return std::strcmp(st1.str, st2.str) < 0; }
 	friend bool operator<=	(const String &st1, const String &st2) { return std::strcmp(st1.str, st2.str) <= 0; }
 	friend bool operator>	(const String &st1, const String &st2) { return st2 < st1; }
